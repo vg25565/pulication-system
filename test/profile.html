@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome CDN for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body class="bg-gray-100 flex flex-col h-screen">
+
+    <!-- Sidebar -->
+    <div class="flex flex-1">
+        <aside class="bg-gray-800 text-white w-64 p-4">
+            <h2 class="text-2xl font-bold mb-6">Dashboard</h2>
+            
+            <!-- Navigation links -->
+            <nav>
+                <ul>
+                    <li><a href="home.html" class="block py-2 px-4 rounded-md hover:bg-gray-700">Home</a></li>
+                    <li><a href="users.html" class="block py-2 px-4 rounded-md hover:bg-gray-700">Users</a></li>
+                    <li><a href="reports.html" class="block py-2 px-4 rounded-md hover:bg-gray-700">Reports</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6">
+            <header class="flex items-center justify-between mb-6">
+                <h1 class="text-3xl font-bold">Profile</h1>
+            </header>
+
+            <!-- Profile Content -->
+            <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+                <div class="flex items-center space-x-4 mb-6">
+                    <i class="fas fa-user-circle text-6xl text-gray-800"></i>
+                    <div>
+                        <p class="text-3xl font-semibold">Super Administrator</p>
+                        <p class="text-gray-600">admin@example.com</p>
+                    </div>
+                </div>
+                <div class="mb-4">
+                    <p class="text-lg font-semibold">Role:</p>
+                    <p class="text-gray-700">Super Administrator</p>
+                </div>
+                <div class="mb-6">
+                    <p class="text-lg font-semibold">Joined:</p>
+                    <!-- Add the date or other information as needed -->
+                </div>
+                <div class="flex justify-end">
+                    <a href="home.html" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-300">Back to Dashboard</a>
+                </div>
+            </div>
+
+        </main>
+    </div>
+    
+</body>
+</html>
