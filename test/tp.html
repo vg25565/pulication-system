@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="sidebar" class="fixed inset-y-0 left-0 w-64 bg-indigo-900 text-white transform transition-transform">
+        <div class="flex items-center justify-between h-16 bg-indigo-900 px-4">
+            <h1 class="text-2xl font-bold">Admin</h1>
+            <button id="closeSidebar" class="text-white focus:outline-none">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+
+                </svg>
+            </button>
+
+        </div>
+        <script>
+              document.getElementById('menuButton').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.toggle('transform');
+            document.getElementById('content').classList.toggle('ml-64');
+        });
+
+        document.getElementById('closeSidebar').addEventListener('click', function() {
+            document.getElementById('sidebar').classList.add('transform');
+            document.getElementById('content').classList.remove('ml-64');
+        });
+        </script>
+    
+</body>
+</html>

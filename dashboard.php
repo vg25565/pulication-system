@@ -1,19 +1,7 @@
 <?php
 session_start();
-$servername = "localhost";
-$username = "root";
-$password = ""; // Replace with your MySQL password
-$dbname = "publication";
-
-// Function to connect to the database
-function connectDatabase() {
-    global $servername, $username, $password, $dbname;
-    $conn = new mysqli($servername, $username, $password, $dbname);
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-    return $conn;
-}
+require 'conn.php';
+require 'send_email.php'; // Import the send_email.php file
 
 // Function to fetch user info
 function getUserInfo($userId) {
@@ -29,15 +17,32 @@ function getUserInfo($userId) {
     return $user;
 }
 
+// Function to count PDFs uploaded by the user
+function countUploadedPDFs($userId) {
+    $conn = connectDatabase();
+    $sql = "SELECT COUNT(*) AS pdf_count FROM uploads WHERE user_id = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("i", $userId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $count = $result->fetch_assoc();
+    $stmt->close();
+    $conn->close();
+    return $count['pdf_count'];
+}
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {
-    header('Location: login.html');
+    header('Location: index.php');
     exit();
 }
 
 $userId = $_SESSION['user_id'];
 $userInfo = getUserInfo($userId);
+$_SESSION['email'] = $userInfo['email'];  // Set session email here
+$pdfCount = countUploadedPDFs($userId);
+
+// Handle file upload logic will be in submission.php
 ?>
 
 <!DOCTYPE html>
@@ -61,8 +66,8 @@ $userInfo = getUserInfo($userId);
             <nav>
                 <ul>
                     <li><a href="dashboard.php" class="block py-2 px-4 rounded-md hover:bg-gray-700">Home</a></li>
-                    <li><a href="#" class="block py-2 px-4 rounded-md hover:bg-gray-700">Logs</a></li>
-                    <li><a href="Grievance.html" class="block py-2 px-4 rounded-md hover:bg-gray-700">Grievance</a></li>
+                    <li><a href="logs.html" class="block py-2 px-4 rounded-md hover:bg-gray-700">Logs</a></li>
+                    <li><a href="Grievance.php" class="block py-2 px-4 rounded-md hover:bg-gray-700">Grievance</a></li>
                     <li><a href="alerts.html" class="block py-2 px-4 rounded-md hover:bg-gray-700">Alerts</a></li>   
                 </ul>
             </nav>
@@ -108,7 +113,7 @@ $userInfo = getUserInfo($userId);
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="bg-blue-100 p-4 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold">User Statistics</h3>
-                        <p class="text-gray-600">View detailed statistics about users.</p>
+                        <p class="text-gray-600">Total PDFs Uploaded: <?php echo $pdfCount; ?></p>
                     </div>
                     <div class="bg-green-100 p-4 rounded-lg shadow-md">
                         <h3 class="text-lg font-semibold">System Settings</h3>
@@ -134,14 +139,14 @@ $userInfo = getUserInfo($userId);
                                     <input type="text" name="faculty_branch" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter faculty branch" required>
                                 </div>
                                 <div>
-    <label class="block text-gray-700 mb-1">Faculty Name</label>
-    <input type="text" name="faculty_name_display" class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($userInfo['username']); ?>" readonly>
-    <input type="hidden" name="faculty_name" value="<?php echo htmlspecialchars($userInfo['username']); ?>">
-</div>
+                                    <label class="block text-gray-700 mb-1">Faculty Name</label>
+                                    <input type="text" name="faculty_name_display" class="w-full p-2 border border-gray-300 rounded" value="<?php echo htmlspecialchars($userInfo['username']); ?>" readonly>
+                                    <input type="hidden" name="faculty_name" value="<?php echo htmlspecialchars($userInfo['username']); ?>">
+                                </div>
 
                                 <div>
-                                    <label class="block text-gray-700 mb-1">Faculty Data</label>
-                                    <input type="text" name="faculty_data" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter faculty data" required>
+                                    <label class="block text-gray-700 mb-1">Paper Title</label>
+                                    <input type="text" name="faculty_data" class="w-full p-2 border border-gray-300 rounded" placeholder="Enter Your Title" required>
                                 </div>
                                 <div>
                                     <label class="block text-gray-700 mb-1">Year</label>
@@ -153,7 +158,7 @@ $userInfo = getUserInfo($userId);
                                     <button type="button" onclick="triggerFileInput()" class="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600">
                                         Browse Files
                                     </button>
-                                    <input type="file" id="file-input" name="file_upload" class="hidden" accept=".pdf" onchange="handleFileSelect(event)" required>
+                                    <input type="file" id="file-input" name="pdf_upload" class="hidden" accept=".pdf" onchange="handleFileSelect(event)" required>
                                 </div>
                             </div>
                             <!-- Submit button -->

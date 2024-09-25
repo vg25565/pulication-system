@@ -68,6 +68,25 @@ CREATE TABLE FacultyInformation (
     file_path VARCHAR(255) NOT NULL,,
     `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 );
+CREATE TABLE uploads (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file_name VARCHAR(255) NOT NULL,
+    user_id INT NOT NULL,
+    upload_date DATETIME DEFAULT CURRENT_TIMESTAMP
+    ALTER TABLE uploads ADD status VARCHAR(50) DEFAULT 'pending';
+
+);
+CREATE TABLE grievances (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    faculty_id INT, -- To track which faculty raised the grievance
+    grievance_text TEXT,
+    status ENUM('submitted', 'resolved') DEFAULT 'submitted',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    ALTER TABLE grievances ADD reply TEXT;
+
+);
+
+
 select*from FacultyInformation;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

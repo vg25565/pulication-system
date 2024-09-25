@@ -1,8 +1,16 @@
-<?php 
-$host="localhost";
-$user="root";
-$pass="";
-$db="publication";
+<?php
+$servername = "localhost";
+$username = "root";
+$password = ""; // Default empty password for root user in XAMPP
+$dbname = "publication";
 
-$conn=mysqli_connect($host,$user,$pass,$db);
+function connectDatabase() {
+    global $servername, $username, $password, $dbname;
+    $conn = new mysqli($servername, $username, $password, $dbname);
+
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    }
+    return $conn;
+}
 ?>
